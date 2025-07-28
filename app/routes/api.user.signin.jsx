@@ -3,6 +3,7 @@ import { connectToDatabase } from "./../utils/db.server";
 import { User } from "./../models/User";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { corsHeaders } from '../utils/auth.server'
 
 export const action = async ({ request }) => {
   await connectToDatabase();
@@ -15,7 +16,7 @@ export const action = async ({ request }) => {
     if (!email || !password) {
       return json(
         { success: false, message: "Email and password are required." },
-        { status: 400 }
+        { status: 400, headers:corsHeaders }
       );
     }
 
@@ -24,7 +25,7 @@ export const action = async ({ request }) => {
     if (!user) {
       return json(
         { success: false, message: "Invalid email or password." },
-        { status: 401 }
+        { status: 401, headers:corsHeaders }
       );
     }
 
@@ -33,7 +34,7 @@ export const action = async ({ request }) => {
     if (!isPasswordValid) {
       return json(
         { success: false, message: "Invalid email or password." },
-        { status: 401 }
+        { status: 401, headers:corsHeaders }
       );
     }
 
@@ -55,12 +56,12 @@ export const action = async ({ request }) => {
         },
         token,
       },
-    });
+    }, {headers:corsHeaders});
   } catch (error) {
     console.error("Error processing login:", error);
     return json(
       { success: false, message: "An error occurred during login." },
-      { status: 500 }
+      { status: 500, headers:corsHeaders }
     );
   }
 };

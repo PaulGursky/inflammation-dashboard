@@ -1,6 +1,6 @@
 import { connectToDatabase } from '../utils/db.server'
 import { json } from '@remix-run/node';
-import { verifyToken } from '../utils/auth.server'
+import { corsHeaders, verifyToken } from '../utils/auth.server'
 import Recipe from '../models/Recipe'
 
 export const loader = async ({ request }) => {
@@ -43,12 +43,12 @@ export const loader = async ({ request }) => {
         updatedAt: recipe.updatedAt,
         v: recipe.__v,
       })),
-    });
+    }, {headers:corsHeaders}); 
   } catch (error) {
     console.error("Error fetching purchased recipes:", error.message);
     return json(
       { success: false, message: error.message || "An error occurred." },
-      { status: error.message === "Unauthorized access." ? 401 : 500 }
+      { status: error.message === "Unauthorized access." ? 401 : 500, headers:corsHeaders }
     );
   }
 };

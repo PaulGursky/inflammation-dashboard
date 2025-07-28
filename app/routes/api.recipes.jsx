@@ -25,6 +25,7 @@ export const action = async ({ request }) => {
       if (!name || !price || !image || !createdBy?.name || !createdBy?.email) {
         throw new Error("Missing required fields.");
       }
+      console.log(ingredients)
 
       // Create a new recipe
       const newRecipe = new Recipe({
@@ -38,7 +39,7 @@ export const action = async ({ request }) => {
 
       const recipe = await newRecipe.save();
 
-      return json({ success: true, recipe, message: "Recipe created successfully." });
+      return json({ success: true, recipe, message: "Recipe created successfully." }, {headers:corsHeaders});
     }
 
   } catch (error) {
@@ -62,6 +63,6 @@ export async function loader() {
     return json({ success: true, results: recipes });
   } catch (error) {
     console.error("Error in /api/recipes:", error);
-    return json({ success: false, message: "Failed to fetch recipes" }, { status: 500 });
+    return json({ success: false, message: "Failed to fetch recipes" }, { status: 500, headers:corsHeaders });
   }
 }
