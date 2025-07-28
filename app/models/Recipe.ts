@@ -1,7 +1,10 @@
 import mongoose from "mongoose";
 const ingredientSubSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  category: { type: String, required: true },
+  quantity: {type: String},
+  ingredient: {
+    name: { type: String, required: true },
+    category: { type: String, required: true },  
+  }
 });
 
 const preparationStepSchema = new mongoose.Schema({
@@ -12,7 +15,9 @@ const preparationStepSchema = new mongoose.Schema({
 const recipeSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
-    ingredients: [ingredientSubSchema],
+    ingredients: [
+      ingredientSubSchema
+    ],
     createdBy: {
       name: { type: String, required: true },
       email: { type: String, required: true },

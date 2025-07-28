@@ -2,6 +2,7 @@ import { json } from "@remix-run/node";
 import { connectToDatabase } from "./../utils/db.server";
 import { User } from "./../models/User";
 import bcrypt from "bcrypt";
+import { corsHeaders } from '../utils/auth.server'
 
 export const action = async ({ request }) => {
   await connectToDatabase();
@@ -14,7 +15,7 @@ export const action = async ({ request }) => {
     if (!name || !email || !password) {
       return json(
         { success: false, message: "Name, email, and password are required." },
-        { status: 400 }
+        { status: 400, headers:corsHeaders }
       );
     }
 
@@ -33,7 +34,7 @@ export const action = async ({ request }) => {
     if (existingUser) {
       return json(
         { success: false, message: "User already exists." },
-        { status: 400 }
+        { status: 400, headers:corsHeaders }
       );
     }
 
@@ -57,7 +58,7 @@ export const action = async ({ request }) => {
       level: 0,
       referral: code || "",
     });
-
+    console.log(user)
     return json(
       {
         success: true,
@@ -68,13 +69,13 @@ export const action = async ({ request }) => {
           email: user.email,
         },
       },
-      { status: 201 }
+      { status: 201, headers:corsHeaders }
     );
   } catch (error) {
     console.error("Error processing signup:", error);
     return json(
       { success: false, message: "An error occurred during signup." },
-      { status: 500 }
+      { status: 500, headers:corsHeaders }
     );
   }
 };

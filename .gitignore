@@ -3,3 +3,6 @@ node_modules
 /.cache
 /build
 .env
+config.bat
+temp_auto_push.bat
+temp_interactive_push.bat
